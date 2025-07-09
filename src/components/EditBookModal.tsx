@@ -22,7 +22,7 @@ interface EditBookModalProps {
 export default function EditBookModal({ book, children }: EditBookModalProps) {
   const [updateBook, { isLoading }] = useUpdateBookMutation();
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -54,7 +54,7 @@ export default function EditBookModal({ book, children }: EditBookModalProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: name === "copies" || name === "price" ? Number(value) : value,
     }));
@@ -62,13 +62,13 @@ export default function EditBookModal({ book, children }: EditBookModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await updateBook({
         id: book._id,
         data: formData,
       }).unwrap();
-      
+
       toast.success("Book updated successfully!");
       setIsOpen(false);
     } catch (error) {
@@ -79,7 +79,7 @@ export default function EditBookModal({ book, children }: EditBookModalProps) {
 
   const handleCancel = () => {
     setIsOpen(false);
-    // Reset form data to original book data
+    // Reset form data
     setFormData({
       title: book.title || "",
       author: book.author || "",
@@ -94,15 +94,13 @@ export default function EditBookModal({ book, children }: EditBookModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
-      
+      <DialogTrigger asChild>{children}</DialogTrigger>
+
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Book: {book.title}</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Title */}
@@ -114,6 +112,7 @@ export default function EditBookModal({ book, children }: EditBookModalProps) {
                 value={formData.title}
                 onChange={handleInputChange}
                 required
+                autoFocus={false}
               />
             </div>
 
@@ -219,10 +218,7 @@ export default function EditBookModal({ book, children }: EditBookModalProps) {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-            >
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? "Updating..." : "Update Book"}
             </Button>
           </div>

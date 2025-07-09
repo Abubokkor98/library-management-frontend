@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { IBook } from "@/types";
 import EditBookModal from "@/components/EditBookModal";
 import DeleteBookModal from "@/components/DeleteBookModal";
+import BorrowBookModal from "@/components/BorrowBookModal";
 
 export default function AllBooks() {
   const { data, isLoading } = useGetBooksQuery({});
@@ -57,7 +58,7 @@ export default function AllBooks() {
               <TableCell className="space-x-2">
                 {/* View Details */}
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => navigate(`/books/${book._id}`)}
                 >
                   View
@@ -65,7 +66,7 @@ export default function AllBooks() {
 
                 {/* Edit Book Modal with pre-filled values */}
                 <EditBookModal book={book}>
-                  <Button variant="outline">Edit</Button>
+                  <Button variant="default">Edit</Button>
                 </EditBookModal>
 
                 {/* Delete Confirmation Modal */}
@@ -73,13 +74,10 @@ export default function AllBooks() {
                   <Button variant="destructive">Delete</Button>
                 </DeleteBookModal>
 
-                {/* Borrow Button */}
-                <Button
-                  variant="ghost"
-                  onClick={() => navigate(`/borrow/${book._id}`)}
-                >
-                  Borrow
-                </Button>
+                {/* Borrow modal */}
+                <BorrowBookModal book={book}>
+                  <Button variant="outline">Borrow</Button>
+                </BorrowBookModal>
               </TableCell>
             </TableRow>
           ))}
