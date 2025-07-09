@@ -1,6 +1,6 @@
 export type Genre = 'FICTION' | 'NON_FICTION' | 'SCIENCE' | 'HISTORY' | 'BIOGRAPHY' | 'FANTASY';
 
-export interface Book {
+export interface IBook {
   _id: string;
   title: string;
   author: string;
@@ -11,8 +11,6 @@ export interface Book {
   description?: string;
   copies: number;
   available: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface CreateBookData {
