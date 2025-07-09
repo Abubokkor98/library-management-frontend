@@ -46,12 +46,9 @@ export default function BookDetails() {
         {/* Book Cover */}
         <div className="md:col-span-1">
           <img
-            src={book.image || "https://via.placeholder.com/400x600/e5e7eb/6b7280?text=No+Image+Available"}
+            src={book.image}
             alt={book.title}
             className="w-full h-auto rounded-lg shadow-md"
-            onError={(e) => {
-              e.currentTarget.src = "https://via.placeholder.com/400x600/e5e7eb/6b7280?text=No+Image+Available";
-            }}
           />
         </div>
 

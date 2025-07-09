@@ -1,6 +1,5 @@
-import  { useState } from "react";
 import { useNavigate } from "react-router";
-import { useGetBooksQuery, useDeleteBookMutation } from "@/redux/api/booksApi";
+import { useGetBooksQuery } from "@/redux/api/booksApi";
 import {
   Table,
   TableBody,
@@ -10,18 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
-import { toast } from "sonner";
 import type { IBook } from "@/types";
-import { AlertDialog, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import EditBookModal from "@/components/EditBookModal";
+import DeleteBookModal from "@/components/DeleteBookModal";
 
 export default function AllBooks() {
   const { data, isLoading } = useGetBooksQuery({});
-  const [deleteBook] = useDeleteBookMutation();
   const navigate = useNavigate();
-
-  const [selectedBook, setSelectedBook] = useState<IBook | null>(null);
 
   if (isLoading) return <p className="text-center">Loading...</p>;
 
@@ -51,9 +45,13 @@ export default function AllBooks() {
               <TableCell>{book.copies}</TableCell>
               <TableCell>
                 {book.copies > 0 ? (
-                  <span className="text-green-600 font-semibold">Available</span>
+                  <span className="text-green-600 font-semibold">
+                    Available
+                  </span>
                 ) : (
-                  <span className="text-red-500 font-semibold">Unavailable</span>
+                  <span className="text-red-500 font-semibold">
+                    Unavailable
+                  </span>
                 )}
               </TableCell>
               <TableCell className="space-x-2">
@@ -65,50 +63,15 @@ export default function AllBooks() {
                   View
                 </Button>
 
-                {/* Edit Book Dialog */}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      onClick={() => setSelectedBook(book)}
-                    >
-                      Edit
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Edit Book</DialogTitle>
-                    </DialogHeader>
-                    <p>Form for editing: <strong>{selectedBook?.title}</strong></p>
-                    {/* Later, you will replace this with your EditBookForm */}
-                  </DialogContent>
-                </Dialog>
+                {/* Edit Book Modal with pre-filled values */}
+                <EditBookModal book={book}>
+                  <Button variant="outline">Edit</Button>
+                </EditBookModal>
 
-                {/* Delete Confirmation */}
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive">Delete</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you sure you want to delete "{book.title}"?
-                      </AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <Button variant="outline">Cancel</Button>
-                      <Button
-                        variant="destructive"
-                        onClick={async () => {
-                          await deleteBook(book._id);
-                          toast.success("Book deleted");
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                {/* Delete Confirmation Modal */}
+                <DeleteBookModal book={book}>
+                  <Button variant="destructive">Delete</Button>
+                </DeleteBookModal>
 
                 {/* Borrow Button */}
                 <Button
