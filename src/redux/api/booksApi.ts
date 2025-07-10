@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const booksApi = createApi({
   reducerPath: "booksApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://library-management-backend-beta-nine.vercel.app/api/",
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
   }),
   tagTypes: ["Book"],
   endpoints: (builder) => ({

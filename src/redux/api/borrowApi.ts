@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://library-management-backend-beta-nine.vercel.app/api/",
+  baseUrl: import.meta.env.VITE_API_BASE_URL,
 });
 
 export const borrowApi = createApi({

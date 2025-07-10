@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card} from "@/components/ui/card";
+import { Link } from "react-router";
 
 export function Banner({ totalBooks }: { totalBooks: number }) {
   return (
@@ -61,12 +62,14 @@ export function Banner({ totalBooks }: { totalBooks: number }) {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <Link to={"/books"}>
             <Button
               size="lg"
               className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               Browse Books
             </Button>
+            </Link>
             <Button
               size="lg"
               variant="outline"
