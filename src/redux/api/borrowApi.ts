@@ -1,31 +1,28 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5000/api/',
+  baseUrl: "https://library-management-backend-beta-nine.vercel.app/api/",
 });
 
 export const borrowApi = createApi({
-  reducerPath: 'borrowApi',
+  reducerPath: "borrowApi",
   baseQuery,
-  tagTypes: ['Borrow'],
+  tagTypes: ["Borrow", "Book"],
   endpoints: (builder) => ({
     borrowBook: builder.mutation({
       query: (borrowData) => ({
-        url: 'borrow',
-        method: 'POST',
+        url: "borrow",
+        method: "POST",
         body: borrowData,
       }),
-      invalidatesTags: ['Borrow'],
+      invalidatesTags: ["Borrow", "Book"],
     }),
-    
+
     getBorrowSummary: builder.query({
-      query: () => 'borrow',
-      providesTags: ['Borrow'],
+      query: () => "borrow",
+      providesTags: ["Borrow"],
     }),
   }),
 });
 
-export const {
-  useBorrowBookMutation,
-  useGetBorrowSummaryQuery,
-} = borrowApi;
+export const { useBorrowBookMutation, useGetBorrowSummaryQuery } = borrowApi;

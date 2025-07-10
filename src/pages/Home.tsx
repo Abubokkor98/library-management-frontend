@@ -14,10 +14,10 @@ export default function Home() {
     data: allBooksData,
     isLoading: allBooksLoading,
     error: allBooksError,
-  } = useGetBooksQuery("");
+  } = useGetBooksQuery({});
 
   const { data: featuredBooksData, isLoading: featuredLoading } =
-    useGetBooksQuery("?sortBy=createdAt&sort=desc&limit=6");
+    useGetBooksQuery({});
 
   const getFilteredBooks = () => {
     if (!allBooksData?.data) return [];
@@ -35,7 +35,7 @@ export default function Home() {
 
         <div className="">
           <FeaturedBooks
-            books={featuredBooksData?.data || []}
+            books={featuredBooksData?.data.slice(0, 4) || []}
             isLoading={featuredLoading}
           />
           <BookCategories

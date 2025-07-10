@@ -5,13 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, BookOpen, Heart } from "lucide-react";
+import BorrowBookModal from "@/components/BorrowBookModal";
+import { toast } from "sonner";
+import { Loader } from "@/components/Loader";
 
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetBookByIdQuery(id as string);
 
-  if (isLoading) return <div className="text-center mt-8">Loading...</div>;
+  if (isLoading) return <Loader />;
 
   if (error || !data?.data) {
     return (
@@ -73,15 +76,21 @@ export default function BookDetails() {
                 </div>
                 <div>
                   <span className="font-medium">ISBN:</span>
-                  <span className="ml-2 text-muted-foreground">{book.isbn}</span>
+                  <span className="ml-2 text-muted-foreground">
+                    {book.isbn}
+                  </span>
                 </div>
                 <div>
                   <span className="font-medium">Price:</span>
-                  <span className="ml-2 text-muted-foreground">${book.price.toFixed(2)}</span>
+                  <span className="ml-2 text-muted-foreground">
+                    ${book.price.toFixed(2)}
+                  </span>
                 </div>
                 <div>
                   <span className="font-medium">Copies:</span>
-                  <span className="ml-2 text-muted-foreground">{book.copies}</span>
+                  <span className="ml-2 text-muted-foreground">
+                    {book.copies}
+                  </span>
                 </div>
               </div>
 
@@ -105,7 +114,9 @@ export default function BookDetails() {
 
               {/* Description */}
               <div>
-                <h3 className="font-medium mb-2 text-emerald-600">Description</h3>
+                <h3 className="font-medium mb-2 text-emerald-600">
+                  Description
+                </h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {book.description}
                 </p>
@@ -115,17 +126,20 @@ export default function BookDetails() {
 
               {/* Actions */}
               <div className="flex gap-3 pt-2">
-                <Button
-                  onClick={() => alert("Borrow logic coming soon!")}
-                  disabled={book.copies <= 0}
-                  className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold transition-all"
-                >
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  {book.copies > 0 ? "Borrow Book" : "Unavailable"}
-                </Button>
+                <BorrowBookModal book={book}>
+                  <Button
+                    disabled={book.copies <= 0}
+                    className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold transition-all"
+                  >
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    {book.copies > 0 ? "Borrow Book" : "Unavailable"}
+                  </Button>
+                </BorrowBookModal>
                 <Button
                   variant="outline"
-                  onClick={() => alert("Add to favorites functionality coming soon!")}
+                  onClick={() =>
+                    toast.info("Add to favorites functionality coming soon!")
+                  }
                   className="flex-1 border-2 border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"
                 >
                   <Heart className="h-4 w-4 mr-2" />

@@ -27,7 +27,7 @@ export function BackgroundEffects({ children, variant = "default" }: BackgroundE
   const positions = orbPositions[variant];
 
   return (
-    <section className="relative py-24 overflow-hidden">
+    <section className="relative py-10 overflow-hidden">
       {/* Background orbs */}
       <div className={`absolute ${positions.orb1} w-96 h-96 bg-gradient-to-br from-emerald-400 to-green-600 rounded-full blur-3xl opacity-4 dark:opacity-6 animate-pulse`}></div>
       <div className={`absolute ${positions.orb2} w-80 h-80 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full blur-3xl opacity-3 dark:opacity-5 animate-pulse delay-1000`}></div>

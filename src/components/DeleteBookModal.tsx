@@ -26,36 +26,45 @@ export default function DeleteBookModal({
   const [deleteBook, { isLoading: isDeleting }] = useDeleteBookMutation();
   const [open, setOpen] = useState(false);
 
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
+  const handleDelete = async () => {
     try {
       await deleteBook(book._id).unwrap();
       toast.success("Book deleted successfully");
       setOpen(false);
     } catch (error) {
       toast.error("Failed to delete book");
+      console.error(error);
     }
   };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
+
+      <AlertDialogContent className="border border-emerald-500/30 shadow-xl bg-background">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete "
-            {book.title}" and remove it from our servers.
+          <AlertDialogTitle className="text-2xl text-emerald-600 font-bold">
+            Are you absolutely sure?
+          </AlertDialogTitle>
+          <AlertDialogDescription className="text-muted-foreground">
+            This action cannot be undone. This will permanently delete{" "}
+            <span className="text-emerald-500 font-medium">"{book.title}"</span>{" "}
+            from the library database.
           </AlertDialogDescription>
         </AlertDialogHeader>
+
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel
+            disabled={isDeleting}
+            className="hover:bg-emerald-100 text-emerald-600 border-emerald-300"
+          >
+            Cancel
+          </AlertDialogCancel>
+
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}
-            className="bg-destructive hover:bg-destructive/90"
-            onSelect={(e) => e.preventDefault()}
+            className="bg-destructive hover:bg-destructive/90 text-white font-semibold"
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </AlertDialogAction>

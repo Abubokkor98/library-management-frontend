@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useUpdateBookMutation } from "@/redux/api/booksApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,214 +12,224 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { toast } from "sonner";
-import type { IBook } from "@/types";
+import type { IBook, Genre } from "@/types";
 
 interface EditBookModalProps {
   book: IBook;
   children: React.ReactNode;
 }
 
-export default function EditBookModal({ book, children }: EditBookModalProps) {
-  const [updateBook, { isLoading }] = useUpdateBookMutation();
-  const [isOpen, setIsOpen] = useState(false);
+type FormValues = {
+  title: string;
+  author: string;
+  genre: Genre;
+  isbn: string;
+  copies: number;
+  price: number;
+  description?: string;
+  image: string;
+};
 
-  const [formData, setFormData] = useState({
-    title: "",
-    author: "",
-    genre: "",
-    isbn: "",
-    copies: 0,
-    price: 0,
-    description: "",
-    image: "",
+const genreOptions: Genre[] = [
+  "FICTION",
+  "NON_FICTION",
+  "SCIENCE",
+  "HISTORY",
+  "BIOGRAPHY",
+  "FANTASY",
+];
+
+export default function EditBookModal({ book, children }: EditBookModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [updateBook, { isLoading }] = useUpdateBookMutation();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: book.title,
+      author: book.author,
+      genre: book.genre,
+      isbn: book.isbn,
+      copies: book.copies,
+      price: book.price,
+      description: book.description || "",
+      image: book.image,
+    },
   });
 
-  // Pre-fill form with book data when modal opens
-  useEffect(() => {
-    if (isOpen && book) {
-      setFormData({
-        title: book.title || "",
-        author: book.author || "",
-        genre: book.genre || "",
-        isbn: book.isbn || "",
-        copies: book.copies || 0,
-        price: book.price || 0,
-        description: book.description || "",
-        image: book.image || "",
-      });
-    }
-  }, [isOpen, book]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "copies" || name === "price" ? Number(value) : value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = async (formData: FormValues) => {
     try {
-      await updateBook({
-        id: book._id,
-        data: formData,
-      }).unwrap();
-
+      await updateBook({ id: book._id, data: formData }).unwrap();
       toast.success("Book updated successfully!");
       setIsOpen(false);
-    } catch (error) {
-      toast.error("Failed to update book. Please try again.");
-      console.error("Update error:", error);
+    } catch (err) {
+      toast.error("Failed to update book.");
+      console.error(err);
     }
-  };
-
-  const handleCancel = () => {
-    setIsOpen(false);
-    // Reset form data
-    setFormData({
-      title: book.title || "",
-      author: book.author || "",
-      genre: book.genre || "",
-      isbn: book.isbn || "",
-      copies: book.copies || 0,
-      price: book.price || 0,
-      description: book.description || "",
-      image: book.image || "",
-    });
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-background border border-emerald-500/20 shadow-xl">
         <DialogHeader>
-          <DialogTitle>Edit Book: {book.title}</DialogTitle>
+          <DialogTitle className="text-2xl text-emerald-600 font-bold">
+            Edit Book: {book.title}
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Title */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="title">Title *</Label>
               <Input
                 id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                autoFocus={false}
+                {...register("title", { required: "Title is required" })}
               />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
+              )}
             </div>
 
             {/* Author */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="author">Author *</Label>
               <Input
                 id="author"
-                name="author"
-                value={formData.author}
-                onChange={handleInputChange}
-                required
+                {...register("author", { required: "Author is required" })}
               />
+              {errors.author && (
+                <p className="text-red-500 text-sm">{errors.author.message}</p>
+              )}
             </div>
 
             {/* Genre */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="genre">Genre *</Label>
-              <Input
-                id="genre"
-                name="genre"
-                value={formData.genre}
-                onChange={handleInputChange}
-                required
-              />
+              <Select
+                onValueChange={(value) => setValue("genre", value as Genre)}
+                defaultValue={watch("genre")}
+              >
+                <SelectTrigger className="w-full focus:ring-emerald-500">
+                  <SelectValue placeholder="Select a genre" />
+                </SelectTrigger>
+                <SelectContent>
+                  {genreOptions.map((genre) => (
+                    <SelectItem key={genre} value={genre}>
+                      {genre
+                        .replace("_", " ")
+                        .toLowerCase()
+                        .replace(/^\w/, (c) => c.toUpperCase())}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.genre && (
+                <p className="text-red-500 text-sm">Genre is required</p>
+              )}
             </div>
 
             {/* ISBN */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="isbn">ISBN *</Label>
               <Input
                 id="isbn"
-                name="isbn"
-                value={formData.isbn}
-                onChange={handleInputChange}
-                required
+                {...register("isbn", { required: "ISBN is required" })}
               />
+              {errors.isbn && (
+                <p className="text-red-500 text-sm">{errors.isbn.message}</p>
+              )}
             </div>
 
             {/* Copies */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="copies">Copies *</Label>
               <Input
                 id="copies"
-                name="copies"
                 type="number"
                 min="0"
-                value={formData.copies}
-                onChange={handleInputChange}
-                required
+                {...register("copies", {
+                  required: "Copies are required",
+                  valueAsNumber: true,
+                })}
               />
+              {errors.copies && (
+                <p className="text-red-500 text-sm">{errors.copies.message}</p>
+              )}
             </div>
 
             {/* Price */}
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="price">Price *</Label>
               <Input
                 id="price"
-                name="price"
                 type="number"
                 min="0"
                 step="0.01"
-                value={formData.price}
-                onChange={handleInputChange}
-                required
+                {...register("price", {
+                  required: "Price is required",
+                  valueAsNumber: true,
+                })}
               />
+              {errors.price && (
+                <p className="text-red-500 text-sm">{errors.price.message}</p>
+              )}
             </div>
           </div>
 
           {/* Image URL */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="image">Image URL</Label>
             <Input
               id="image"
-              name="image"
               type="url"
-              value={formData.image}
-              onChange={handleInputChange}
+              {...register("image")}
               placeholder="https://example.com/book-cover.jpg"
             />
           </div>
 
           {/* Description */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
               rows={4}
+              {...register("description")}
               placeholder="Enter book description..."
             />
           </div>
 
-          {/* Actions */}
+          {/* Buttons */}
           <div className="flex justify-end space-x-2 pt-4">
             <Button
               type="button"
               variant="outline"
-              onClick={handleCancel}
+              onClick={() => setIsOpen(false)}
               disabled={isLoading}
+              className="border-emerald-500 text-emerald-600 hover:bg-emerald-50"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 transition"
+            >
               {isLoading ? "Updating..." : "Update Book"}
             </Button>
           </div>

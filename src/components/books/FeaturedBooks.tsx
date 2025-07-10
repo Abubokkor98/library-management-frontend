@@ -37,7 +37,7 @@ export function FeaturedBooks({
       </div>
 
       {/* Books Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {isLoading
           ? [...Array(8)].map((_, index) => <BookSkeleton key={index} />)
           : books.map((book) => <BookCard key={book._id} book={book} />)}

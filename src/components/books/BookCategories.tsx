@@ -53,7 +53,7 @@ export function BookCategories({
         onValueChange={setSelectedCategory}
         className="w-full"
       >
-        {/* Enhanced TabsList with glassmorphism */}
+        {/* TabsList */}
         <div className="flex justify-center mb-12">
           <TabsList className="inline-flex w-auto bg-card/50 backdrop-blur-sm border border-emerald-500/20 rounded-xl p-2 shadow-lg">
             {categories.map((category) => (
@@ -70,7 +70,7 @@ export function BookCategories({
 
         {categories.map((category) => (
           <TabsContent key={category.value} value={category.value} className="mt-8">
-            {/* Category header with glassmorphism */}
+            {/* Category */}
             <div className="text-center mb-8">
               <div className="backdrop-blur-sm bg-card/30 rounded-xl p-6 border border-emerald-500/10 max-w-md mx-auto">
                 <h3 className="text-2xl font-bold mb-2 text-emerald-600 dark:text-emerald-400">
@@ -118,7 +118,7 @@ export function BookCategories({
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {filteredBooks.map((book) => (
                   <BookCard key={book._id} book={book} />
                 ))}

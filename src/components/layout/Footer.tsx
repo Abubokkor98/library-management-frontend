@@ -74,7 +74,7 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li>
                   <Link
-                    to="/books?filter=FICTION"
+                    to="#"
                     className="text-sm text-muted-foreground hover:text-emerald-500 transition-colors duration-200"
                   >
                     Fiction
@@ -82,7 +82,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/books?filter=SCIENCE"
+                    to="#"
                     className="text-sm text-muted-foreground hover:text-emerald-500 transition-colors duration-200"
                   >
                     Science
@@ -90,7 +90,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/books?filter=HISTORY"
+                    to="#"
                     className="text-sm text-muted-foreground hover:text-emerald-500 transition-colors duration-200"
                   >
                     History
@@ -98,7 +98,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/books?filter=FANTASY"
+                    to="#"
                     className="text-sm text-muted-foreground hover:text-emerald-500 transition-colors duration-200"
                   >
                     Fantasy
@@ -147,7 +147,7 @@ const Footer = () => {
                 purposes.
               </p>
               <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
-                Trusted by readers and librarians worldwide
+                Build by Abu Bokkor Siddik
               </p>
             </div>
           </div>
