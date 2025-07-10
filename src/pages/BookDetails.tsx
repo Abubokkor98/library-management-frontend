@@ -12,7 +12,7 @@ export default function BookDetails() {
   const { data, isLoading, error } = useGetBookByIdQuery(id as string);
 
   if (isLoading) return <div className="text-center mt-8">Loading...</div>;
-  
+
   if (error || !data?.data) {
     return (
       <div className="text-center mt-8 text-red-500">
@@ -35,7 +35,7 @@ export default function BookDetails() {
       <Button
         onClick={() => navigate(-1)}
         variant="ghost"
-        className="mb-6"
+        className="mb-6 text-emerald-600 hover:text-emerald-700"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Library
@@ -48,24 +48,26 @@ export default function BookDetails() {
           <img
             src={book.image}
             alt={book.title}
-            className="w-full h-auto rounded-lg shadow-md"
+            className="w-full h-auto rounded-lg shadow-md border border-emerald-500/20"
           />
         </div>
 
         {/* Book Details */}
         <div className="md:col-span-2">
-          <Card>
+          <Card className="bg-card/50 border border-emerald-500/20 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-2xl">{book.title}</CardTitle>
+              <CardTitle className="text-3xl text-emerald-600">
+                {book.title}
+              </CardTitle>
               <p className="text-lg text-muted-foreground">{book.author}</p>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               {/* Book Info */}
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="font-medium">Genre:</span>
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge className="ml-2 bg-emerald-500/20 text-emerald-700 border border-emerald-500/30">
                     {book.genre}
                   </Badge>
                 </div>
@@ -89,8 +91,11 @@ export default function BookDetails() {
               <div className="flex items-center gap-2">
                 <span className="font-medium">Status:</span>
                 <Badge
-                  variant={book.copies > 0 ? "default" : "destructive"}
-                  className={book.copies > 0 ? "bg-green-600" : ""}
+                  className={
+                    book.copies > 0
+                      ? "bg-green-600 text-white"
+                      : "bg-red-500 text-white"
+                  }
                 >
                   {book.copies > 0 ? "Available" : "Unavailable"}
                 </Badge>
@@ -100,7 +105,7 @@ export default function BookDetails() {
 
               {/* Description */}
               <div>
-                <h3 className="font-medium mb-2">Description</h3>
+                <h3 className="font-medium mb-2 text-emerald-600">Description</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {book.description}
                 </p>
@@ -113,15 +118,15 @@ export default function BookDetails() {
                 <Button
                   onClick={() => alert("Borrow logic coming soon!")}
                   disabled={book.copies <= 0}
-                  className="flex-1"
+                  className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold transition-all"
                 >
                   <BookOpen className="h-4 w-4 mr-2" />
                   {book.copies > 0 ? "Borrow Book" : "Unavailable"}
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => alert("Add to favorites functionality coming soon!")}
-                  className="flex-1"
+                  className="flex-1 border-2 border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"
                 >
                   <Heart className="h-4 w-4 mr-2" />
                   Add to Favorites

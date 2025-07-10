@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { BookOpen, Menu, Plus, BarChart3, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { WrapperContainer } from "@/lib/WrapperContainer";
+import { ModeToggle } from "../mode-toggle";
 
 const Header = () => {
   const location = useLocation();
@@ -27,40 +28,48 @@ const Header = () => {
   };
 
   return (
-    <WrapperContainer>
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
+
+      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md shadow-sm">
+           <WrapperContainer>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
+            <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-600 rounded-lg">
               <BookOpen className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold gradient-text">LibraryHub</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">
+              LibraryHub
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-              {navigation.map((item) => (
-                <NavigationMenuItem key={item.name}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={item.href}
-                      className={cn(
-                        navigationMenuTriggerStyle(),
-                        "flex items-center gap-2",
-                        isActiveRoute(item.href) &&
-                          "bg-accent text-accent-foreground"
-                      )}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {item.name}
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+          <div className="hidden md:flex items-center gap-4">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {navigation.map((item) => (
+                  <NavigationMenuItem key={item.name}>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          "flex items-center gap-2",
+                          isActiveRoute(item.href) &&
+                            "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {item.name}
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+
+            {/* Desktop Mode Toggle */}
+            <ModeToggle />
+          </div>
 
           {/* Mobile Navigation */}
           <Sheet>
@@ -71,11 +80,12 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <div className="flex flex-col gap-4 mt-6">
+                {/* Mobile Logo */}
                 <Link to="/" className="flex items-center space-x-2 mb-6">
-                  <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
+                  <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-600 rounded-lg">
                     <BookOpen className="h-6 w-6 text-white" />
                   </div>
-                  <span className="text-xl font-bold gradient-text">
+                  <span className="text-xl font-bold bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">
                     LibraryHub
                   </span>
                 </Link>
@@ -85,21 +95,26 @@ const Header = () => {
                     key={item.name}
                     to={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                      "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900 hover:text-emerald-700 dark:hover:text-emerald-300",
                       isActiveRoute(item.href) &&
-                        "bg-accent text-accent-foreground"
+                        "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300"
                     )}
                   >
                     <item.icon className="h-5 w-5" />
                     {item.name}
                   </Link>
                 ))}
+
+                <div className="mt-6 pt-4 border-t">
+                  <ModeToggle />
+                </div>
               </div>
             </SheetContent>
           </Sheet>
         </div>
+        </WrapperContainer>
       </header>
-    </WrapperContainer>
+    
   );
 };
 
