@@ -48,16 +48,18 @@ export default function BookDetails() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Book Cover */}
         <div className="md:col-span-1">
-          <img
-            src={book.image}
-            alt={book.title}
-            className="w-full h-auto rounded-lg shadow-md border border-emerald-500/20"
-          />
+          <div className="w-full h-full min-h-[400px] rounded-lg shadow-md border border-emerald-500/20 overflow-hidden">
+            <img
+              src={book.image}
+              alt={book.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
 
         {/* Book Details */}
         <div className="md:col-span-2">
-          <Card className="bg-card/50 border border-emerald-500/20 backdrop-blur-sm">
+          <Card className="bg-card/50 border border-emerald-500/20 backdrop-blur-sm h-full">
             <CardHeader>
               <CardTitle className="text-3xl text-emerald-600">
                 {book.title}

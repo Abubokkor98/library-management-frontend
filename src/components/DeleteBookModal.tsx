@@ -58,7 +58,7 @@ export default function DeleteBookModal({
             disabled={isDeleting}
             className="hover:bg-emerald-100 text-emerald-600 border-emerald-300"
           >
-            Cancel
+            No, Keep It.
           </AlertDialogCancel>
 
           <AlertDialogAction
@@ -66,7 +66,7 @@ export default function DeleteBookModal({
             disabled={isDeleting}
             className="bg-destructive hover:bg-destructive/90 text-white font-semibold"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? "Deleting..." : "Yes, Delete!"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
