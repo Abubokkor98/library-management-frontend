@@ -55,6 +55,7 @@ export default function BorrowBookModal({ book, children }: BorrowBookModalProps
        dispatch(booksApi.util.invalidateTags(['Book']));
       reset();
       setIsOpen(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to borrow book");
     }
